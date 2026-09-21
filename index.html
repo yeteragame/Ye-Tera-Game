@@ -1,0 +1,22 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>YE TERA GAME</title>
+<style>
+body{margin:0;background:#080a0f;color:#fff;font:15px Arial}nav{padding:15px 6%;background:#10141c;display:flex;justify-content:space-between}.logo{font-weight:900;font-size:21px}.logo b{color:#ff4d00}main{max-width:1000px;margin:auto;padding:35px 6%}.hero{text-align:center;padding:45px 0}.hero h1{font-size:60px}.orange{color:#ff4d00}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:15px}.card,.panel{background:#111620;border:1px solid #29313e;border-radius:13px;padding:18px;margin:12px 0}.btn{background:#ff4d00;color:#fff;border:0;padding:12px 17px;border-radius:8px;font-weight:bold}.btn.dark{background:#1b222d}input,select{width:100%;padding:12px;margin:6px 0 14px;background:#080a0f;color:#fff;border:1px solid #303846;border-radius:8px}label{font-size:12px;color:#aab2bf}.msg{display:none;padding:10px;margin-top:10px;background:#123a24;color:#70eda4;border-radius:7px}.muted{color:#8d97a7}
+</style></head><body>
+<nav><div class="logo">YE TERA <b>GAME</b></div><div>BGMI • FREE FIRE</div></nav>
+<main>
+<div class="hero"><h1>YE TERA <span class="orange">GAME</span></h1><p class="muted">Tournament platform</p></div>
+<h2>Tournaments</h2><div class="grid" id="tours"></div>
+<h2>Register Team</h2><div class="panel">
+<label>Tournament</label><select id="tid"></select><label>Team</label><input id="team"><label>Captain</label><input id="captain"><label>Mobile</label><input id="phone"><label>Player 2</label><input id="p2"><label>Player 3</label><input id="p3"><label>Player 4</label><input id="p4">
+<button class="btn" onclick="registerTeam()">Register</button><div id="msg" class="msg"></div></div>
+<h2>Admin</h2><div class="panel"><label>Email</label><input id="email" value="vishalminote06@gmail.com" readonly><label>Password</label><input id="pass" type="password"><button class="btn dark" onclick="adminLogin()">Admin Login</button><div id="adminmsg" class="msg"></div></div>
+</main>
+<script>
+let tours=[];
+async function load(){tours=await (await fetch('/api/tournaments')).json();tid.innerHTML=tours.map(t=>`<option value="${t.id}">${t.name} — ${t.game} — ${t.fee?'₹'+t.fee:'FREE'}</option>`).join('');document.getElementById('tours').innerHTML=tours.map(t=>`<div class="card"><b>${t.game}</b><h3>${t.name}</h3><p>Entry: ${t.fee?'₹'+t.fee:'FREE'}<br>Prize: ₹${t.prize}</p></div>`).join('')}
+async function registerTeam(){const body={tournamentId:tid.value,team:team.value,captain:captain.value,phone:phone.value,players:[p2.value,p3.value,p4.value]};const r=await fetch('/api/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const x=await r.json();msg.style.display='block';msg.textContent=r.ok?'Registration received. Payment status: '+x.registration.paymentStatus:x.error}
+async function adminLogin(){const r=await fetch('/api/admin/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:email.value,password:pass.value})});adminmsg.style.display='block';adminmsg.textContent=r.ok?'Admin login successful.':(await r.json()).error}
+load();
+</script></body></html>

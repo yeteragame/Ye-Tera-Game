@@ -1,0 +1,17 @@
+YE TERA GAME — REAL BACKEND STARTER
+
+1. Install Node.js 20+.
+2. In this folder run: npm install
+3. Copy .env.example to .env.
+4. Set ADMIN_PASSWORD to a strong NEW password.
+5. Run: npm start
+6. Open http://localhost:3000
+
+The admin email is fixed to:
+vishalminote06@gmail.com
+
+Important:
+- Do NOT put your Gmail password in this project.
+- Do NOT put payment secret keys in public/index.html.
+- This starter uses a JSON file for local testing. A production site should use a real database.
+- Real payment requires a merchant account and server-side webhook verification. No real payment is enabled in this starter.
